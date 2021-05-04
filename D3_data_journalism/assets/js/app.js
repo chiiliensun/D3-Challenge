@@ -30,21 +30,23 @@ const chartGroup = svg.append("g")
   .attr("transform", `translate(${chartMargin.left}, ${chartMargin.top})`);
 
 // Load data from hours-of-tv-watched.csv
-d3.csv("assets/data/data.csv").then(function(tvData) {
+d3.csv("assets/data/data.csv").then(function(censusData) {
 
   // Log the tvData
-  console.log(tvData);
+  console.log(censusData);
 
   // Cast the hours value to a number for each piece of tvData
-  tvData.forEach(function(data) {
-    data.hours = +data.hours;
+  censusData.forEach(function(data) {
+    data.healthcare = +data.healthcare;
+    data.poverty = +data.poverty;
   });
 
-  const barSpacing = 10; // desired space between each bar
-  const scaleY = 8; // 8x scale on rect height
+  // Create a linear scale for the y axis.
+  const yLinearScale = d3.scaleLinear()
+    .domain([0, d3.max(tvData, d => d.hours)])
+    .range([chartHeight, 0]);
 
-  // Create a 'barWidth' variable so that the bar chart spans the entire chartWidth.
-  const barWidth = (chartWidth - (barSpacing * (tvData.length - 1))) / tvData.length;
+
 
   // Create code to build the bar chart using the tvData.
   chartGroup.selectAll("rect")
