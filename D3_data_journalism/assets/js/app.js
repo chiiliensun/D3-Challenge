@@ -9,7 +9,7 @@ const svgHeight = 650;
 const chartMargin = {
   top: 40,
   right: 40,
-  bottom: 70,
+  bottom: 100,
   left: 40
 };
 
@@ -43,18 +43,18 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
 
   // Create a linear scale for the y axis.
   const yLinearScale = d3.scaleLinear()
-    .domain([2, d3.max(censusData, d => d.poverty)])
+    .domain([d3.min(censusData, d => d.poverty), d3.max(censusData, d => d.poverty)])
     .range([chartHeight, 0]);
 
   // Create scale functions for x axis
   const xLinearScale = d3.scaleLinear()
-    .domain([6, d3.max(censusData, d => d.healthcare)])
+    .domain([d3.min(censusData, d => d.healthcare), d3.max(censusData, d => d.healthcare)])
     .range([0, chartWidth]);
 
   // Create two new functions passing the scales in as arguments
   // These will be used to create the chart's axes
-  const bottomAxis = d3.axisBottom(xLinearScale);
-  const leftAxis = d3.axisLeft(yLinearScale);
+  const bottomAxis = d3.axisBottom(xLinearScale.nice());
+  const leftAxis = d3.axisLeft(yLinearScale.nice());
 
   // Append an SVG group element to the chartGroup, create the bottom axis inside of it
   // Translate the bottom axis to the bottom of the page
@@ -75,24 +75,21 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
     .join("circle")
     .attr("cx", d => xLinearScale(d.healthcare))
     .attr("cy", d => yLinearScale(d.poverty))
-    .attr("r", "15")
-    // .attr("fill", "pink")
-    .attr("opacity", 0.5)
-    .attr("stroke", "black")
-    .attr("stroke-width", 1);
+    .attr("r", "12")
+    .attr("class", "stateCircle");
 
-    // Step 6: Initialize tool tip
+    // Initialize tool tip
     // ==============================
     const toolTip = d3.tip()
       .attr("class", "tooltip")
       .offset([80, 0])
-      .html(d => `${d.state}<br>Health Care: ${d.healthcare} % <br> Poverty: ${d.poverty} %`);
+      .html(d => `<strong>${d.state}<br>Health Care: ${d.healthcare} % <br> Poverty: ${d.poverty} %`);
 
-    // Step 7: Create tooltip in the chart
+    // Create tooltip in the chart
     // ==============================
     chartGroup.call(toolTip);
 
-    // Step 8: Create event listeners to display and hide the tooltip
+    // Create event listeners to display and hide the tooltip
     // ==============================
     circlesGroup.on("click", function(data) {
       toolTip.show(data, this);
@@ -103,6 +100,7 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
       });
 
     // Create axes labels
+    // x axis labels
     chartGroup.append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", -5 - chartMargin.left)
@@ -111,10 +109,22 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
       .attr("class", "axisText")
       .text("Lacks Healthcare (%)");
 
+      // y axis labels
     chartGroup.append("text")
       .attr("transform", `translate(${chartWidth / 2}, ${chartHeight + chartMargin.top + 25})`)
       .attr("class", "axisText")
       .text("In Poverty (%)");
+
+      // bubble state abbr labels
+      // used part of code and how to put abbr into bubbles https://bl.ocks.org/alokkshukla/3d6be4be0ef9f6977ec6718b2916d168
+      const abbrState = chartGroup.selectAll("stateText")
+      .data(censusData)
+      .enter()
+      .append("text")
+      .classed("stateText", true)
+      .attr("x", d => xLinearScale(d.healthcare))
+      .attr("y", d => yLinearScale(d.poverty))
+      .text(d => d.abbr);
 
 
 }).catch(error => console.log(error));
