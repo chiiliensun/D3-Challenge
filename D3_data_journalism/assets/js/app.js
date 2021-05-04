@@ -2,15 +2,15 @@
 
 // starting with D3 02-Activities-03-Par_BarChart_From_CSV
 // Define SVG area dimensions
-const svgWidth = 960;
-const svgHeight = 560;
+const svgWidth = 1000;
+const svgHeight = 650;
 
 // Define the chart's margins as an object
 const chartMargin = {
-  top: 30,
-  right: 30,
-  bottom: 30,
-  left: 30
+  top: 40,
+  right: 40,
+  bottom: 70,
+  left: 40
 };
 
 // Define dimensions of the chart area
@@ -43,7 +43,7 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
 
   // Create a linear scale for the y axis.
   const yLinearScale = d3.scaleLinear()
-    .domain([1, d3.max(censusData, d => d.poverty)])
+    .domain([2, d3.max(censusData, d => d.poverty)])
     .range([chartHeight, 0]);
 
   // Create scale functions for x axis
@@ -68,15 +68,15 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
     .classed("axis", true)
     .call(leftAxis);
 
-    // Step 5: Create Circles
+    // Create Circles
     // ==============================
     const circlesGroup = chartGroup.selectAll("circle")
-    .data(hairData)
+    .data(censusData)
     .join("circle")
-    .attr("cx", d => xLinearScale(d.hair_length))
-    .attr("cy", d => yLinearScale(d.num_hits))
+    .attr("cx", d => xLinearScale(d.healthcare))
+    .attr("cy", d => yLinearScale(d.poverty))
     .attr("r", "15")
-    .attr("fill", "pink")
+    // .attr("fill", "pink")
     .attr("opacity", 0.5)
     .attr("stroke", "black")
     .attr("stroke-width", 1);
@@ -85,8 +85,8 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
     // ==============================
     const toolTip = d3.tip()
       .attr("class", "tooltip")
-      .offset([80, -60])
-      .html(d => `${d.rockband}<br>Hair length: ${d.hair_length}<br>Hits: ${d.num_hits}`);
+      .offset([80, 0])
+      .html(d => `${d.state}<br>Health Care: ${d.healthcare} % <br> Poverty: ${d.poverty} %`);
 
     // Step 7: Create tooltip in the chart
     // ==============================
@@ -105,16 +105,16 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
     // Create axes labels
     chartGroup.append("text")
       .attr("transform", "rotate(-90)")
-      .attr("y", 0 - margin.left + 40)
-      .attr("x", 0 - (height / 2))
+      .attr("y", -5 - chartMargin.left)
+      .attr("x", 0 - (chartHeight / 1.4))
       .attr("dy", "1em")
       .attr("class", "axisText")
-      .text("Number of Billboard 100 Hits");
+      .text("Lacks Healthcare (%)");
 
     chartGroup.append("text")
-      .attr("transform", `translate(${width / 2}, ${height + margin.top + 30})`)
+      .attr("transform", `translate(${chartWidth / 2}, ${chartHeight + chartMargin.top + 25})`)
       .attr("class", "axisText")
-      .text("Hair Metal Band Hair Length (inches)");
-  }).catch(error => console.log(error));
+      .text("In Poverty (%)");
+
 
 }).catch(error => console.log(error));
