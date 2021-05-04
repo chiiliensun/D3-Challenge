@@ -53,19 +53,11 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
 
   // Create two new functions passing the scales in as arguments
   // These will be used to create the chart's axes
-  const bottomAxis = d3.axisBottom(xTimeScale);
+  const bottomAxis = d3.axisBottom(xLinearScale);
   const leftAxis = d3.axisLeft(yLinearScale);
 
-  // Create code to build the bar chart using the tvData.
-  chartGroup.selectAll("rect")
-    .data(tvData)
-    .join("rect")
-    .attr('height',d=>d.hours*scaleY)
-    .attr('width', barWidth)
-    .attr('x',(d,i)=>(barWidth+barSpacing)*i)
-    .attr('y',d => chartHeight - d.hours*scaleY)
-    .attr('class','bar')
-    // chartHeight = y-start-coordinate + height of bar
-    // chartHeight - height of bar = y-start-coordinate
+  // Create code to build the scatter plot.
+  chartGroup.append("g")
+    
 
 }).catch(error => console.log(error));
