@@ -15,12 +15,12 @@ The data set included with the assignment is based on 2014 ACS 1-year estimates 
 
 ### Core Assignment: D3 Dabbler (Required Assignment)
 
-![4-scatter](Images/4-scatter.jpg)
+![4-scatter](D3_data_journalism/assets/imgs/scatter_screenshot.png)
 
-You need to create a scatter plot between two of the data variables such as `Healthcare vs. Poverty` or `Smokers vs. Age`.
+I created a scatter plot between two of the data variables such as `Healthcare vs. Poverty`.
 
-Using the D3 techniques we taught you in class, create a scatter plot that represents each state with circle elements. You'll code this graphic in the `app.js` file of your homework directory—make sure you pull in the data from `data.csv` by using the `d3.csv` function. Your scatter plot should ultimately appear like the image at the top of this section.
+Using the D3 techniques I was taught in class, I create a scatter plot that represents each state with circle elements. I wrote code shown by this graphic in the `app.js` file of this repo— and made sure to pull in the data from `data.csv` by using the `d3.csv` function.
 
-* Include state abbreviations in the circles.
+* I included state abbreviations in the circles.
 
-* Create and situate your axes and labels to the left and bottom of the chart.
+* I created and situated the axes and labels to the left and bottom of the chart.
