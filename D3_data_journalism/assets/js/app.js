@@ -30,7 +30,7 @@ const chartGroup = svg.append("g")
   .attr("transform", `translate(${chartMargin.left}, ${chartMargin.top})`);
 
 // Load data from hours-of-tv-watched.csv
-d3.csv("assets/data/data.csv").then(function(censusData) {
+d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
 
   // Log the tvData
   console.log(censusData);
@@ -46,11 +46,15 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
     .domain([0, d3.max(censusData, d => d.poverty)])
     .range([chartHeight, 0]);
 
-    // Create scale functions for x axis
-    const xLinearScale = d3.scaleLinear()
-        .domain([8, d3.max(stateData, d => d.healthcare)])
-        .range([0, width]);
+  // Create scale functions for x axis
+  const xLinearScale = d3.scaleLinear()
+    .domain([6, d3.max(censusData, d => d.healthcare)])
+    .range([0, chartWidth]);
 
+  // Create two new functions passing the scales in as arguments
+  // These will be used to create the chart's axes
+  const bottomAxis = d3.axisBottom(xTimeScale);
+  const leftAxis = d3.axisLeft(yLinearScale);
 
   // Create code to build the bar chart using the tvData.
   chartGroup.selectAll("rect")
