@@ -43,9 +43,13 @@ d3.csv("assets/data/data.csv").then(function(censusData) {
 
   // Create a linear scale for the y axis.
   const yLinearScale = d3.scaleLinear()
-    .domain([0, d3.max(tvData, d => d.hours)])
+    .domain([0, d3.max(censusData, d => d.poverty)])
     .range([chartHeight, 0]);
 
+    // Create scale functions for x axis
+    const xLinearScale = d3.scaleLinear()
+        .domain([8, d3.max(stateData, d => d.healthcare)])
+        .range([0, width]);
 
 
   // Create code to build the bar chart using the tvData.
