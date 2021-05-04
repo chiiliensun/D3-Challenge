@@ -43,7 +43,7 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
 
   // Create a linear scale for the y axis.
   const yLinearScale = d3.scaleLinear()
-    .domain([0, d3.max(censusData, d => d.poverty)])
+    .domain([1, d3.max(censusData, d => d.poverty)])
     .range([chartHeight, 0]);
 
   // Create scale functions for x axis
@@ -56,8 +56,16 @@ d3.csv("D3_data_journalism/assets/data/data.csv").then(function(censusData) {
   const bottomAxis = d3.axisBottom(xLinearScale);
   const leftAxis = d3.axisLeft(yLinearScale);
 
-  // Create code to build the scatter plot.
+  // Append an SVG group element to the chartGroup, create the bottom axis inside of it
+  // Translate the bottom axis to the bottom of the page
   chartGroup.append("g")
-    
+    .classed("axis", true)
+    .attr("transform", `translate(0, ${chartHeight})`)
+    .call(bottomAxis);
+
+    // Append an SVG group element to the chartGroup, create the left axis inside of it
+  chartGroup.append("g")
+    .classed("axis", true)
+    .call(leftAxis);
 
 }).catch(error => console.log(error));
